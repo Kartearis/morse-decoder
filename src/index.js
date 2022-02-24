@@ -37,8 +37,24 @@ const MORSE_TABLE = {
     '-----':  '0',
 };
 
+let morseConv = {};
+let encode = (code) => {
+    code = code.replace(/-/g, '11');
+    code = code.replace(/\./g, '10');
+    return code.padStart(10, '0');
+}
+
+Object.entries(MORSE_TABLE).forEach(entry => morseConv[encode(entry[0])] = entry[1]);
+morseConv['*'.repeat(10)] = ' ';
 function decode(expr) {
-    // write your solution here
+    // Split in batches 10 symbols each, convert each batch separatly, then join and return
+    let decoded = "";
+    for (let i = 0; i < expr.length; i+=10)
+    {
+        let symbol = expr.slice(i, i + 10);
+        decoded += morseConv[symbol];
+    }
+    return decoded;
 }
 
 module.exports = {
